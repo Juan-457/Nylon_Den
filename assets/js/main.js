@@ -99,13 +99,55 @@
     });
   }
 
+  var counters = Array.prototype.slice.call(document.querySelectorAll('[data-counter]'));
+
+  function renderCounter(element, value) {
+    var prefix = element.getAttribute('data-prefix') || '';
+    var suffix = element.getAttribute('data-suffix') || '';
+    element.textContent = prefix + value + suffix;
+  }
+
+  function animateCounter(element) {
+    var target = Number(element.getAttribute('data-target'));
+    var duration = 1400;
+    var startedAt = null;
+
+    function tick(timestamp) {
+      if (startedAt === null) startedAt = timestamp;
+      var progress = Math.min((timestamp - startedAt) / duration, 1);
+      var easedProgress = 1 - Math.pow(1 - progress, 3);
+      renderCounter(element, Math.round(target * easedProgress));
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  if (counters.length && !reducedMotionQuery.matches) {
+    counters.forEach(function (counter) { renderCounter(counter, 0); });
+
+    if ('IntersectionObserver' in window) {
+      var counterObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.5 });
+
+      counters.forEach(function (counter) { counterObserver.observe(counter); });
+    } else {
+      counters.forEach(animateCounter);
+    }
+  }
+
   var form = document.getElementById('contactForm');
   var formNote = document.getElementById('formNote');
   if (form) {
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       formNote.textContent = '¡Gracias! Esta es una demo sin backend todavía — cuando conectemos el envío real, tu consulta va a llegar acá.';
-      formNote.style.color = '#c2410c';
+      formNote.style.color = '#08788f';
       formNote.style.fontWeight = '600';
     });
   }
