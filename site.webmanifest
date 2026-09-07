@@ -1,7 +1,7 @@
 {
   "name": "CDZSUPPLY",
   "short_name": "CDZSUPPLY",
-  "description": "CDZSUPPLY importa y distribuye stretch film industrial para logística, depósitos y agro, con stock permanente, entrega rápida y asesoramiento técnico.",
+  "description": "CDZSUPPLY importa y distribuye soluciones de embalaje e insumos para e-commerce, logística y negocios, con stock permanente y entrega rápida.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
